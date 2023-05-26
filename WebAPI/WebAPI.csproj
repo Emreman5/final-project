@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Business\Business.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\Uploads\MidtermExamQuestionImages\" />
+    <Folder Include="wwwroot\Uploads\FinalExamQuestionImages\" />
+    <Folder Include="wwwroot\Uploads\HomeworkContentImages\" />
+    <Folder Include="wwwroot\Uploads\ApplicationContentImages\" />
+    <Folder Include="wwwroot\Uploads\LessonDocumentImages\" />
+    <Folder Include="wwwroot\Uploads\ProgramOutputImages\" />
+    <Folder Include="wwwroot\Uploads\ProjectContentImages\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="8.0.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+  </ItemGroup>
+
+</Project>
