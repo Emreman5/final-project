@@ -43,5 +43,18 @@ namespace WebAPI.Controllers
             var list = _userManager.Users.ToList();
             return Ok(list);
         }
+        [HttpDelete]
+        public async Task<IActionResult> DeleteUser(string id)
+        {
+            var selectedUser = await _userManager.FindByIdAsync(id);
+            if (selectedUser == null)
+            {
+                return BadRequest("user bulunamadı");
+            }
+            await _userManager.DeleteAsync(selectedUser);
+            return Ok();
+
+        }
+
     }
 }
