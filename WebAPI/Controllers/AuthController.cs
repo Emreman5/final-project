@@ -24,6 +24,10 @@ namespace WebAPI.Controllers
             try
             {
                 var result = await _authService.CreateUser(dto, _config);
+                if (!result.IsSuccess)
+                {
+                    return BadRequest(result);
+                }
                 return Ok(result);
             }
             catch (Exception e)
