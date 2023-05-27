@@ -26,7 +26,7 @@ namespace WebAPI.Controllers
                 var result = await _authService.CreateUser(dto, _config);
                 if (!result.IsSuccess)
                 {
-                    return BadRequest(result);
+                    return StatusCode(403);
                 }
                 return Ok(result);
             }
