@@ -27,6 +27,7 @@ namespace WebAPI.Controllers
                 return BadRequest("User bulunamadı");
             }
             selectedUser.Fullname = dto.FullName;
+            selectedUser.UserName = dto.Username;
             selectedUser.Email = dto.Email;
             if (dto.Password is not null)
             {
