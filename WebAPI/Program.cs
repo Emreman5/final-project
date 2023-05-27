@@ -1,13 +1,19 @@
 using Autofac;
+using Autofac.Core;
 using Autofac.Extensions.DependencyInjection;
 using Business.Abstarct;
 using Business.Concrete;
 using Business.DependencyResolvers.Autofac;
 using DataAccess.Abstract;
 using DataAccess.Concrete;
+using Entities;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using WebApi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
-
+var conf = builder.Configuration;
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -15,23 +21,25 @@ builder.Services.AddControllers();
 builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory()).ConfigureContainer<ContainerBuilder>(builder =>
     {
         builder.RegisterModule(new AutofacBusinessModule());
+
+
     });
 
-
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddIdentity<CustomUser, IdentityRole>().AddEntityFrameworkStores<ProjectDbContext>().
+    AddDefaultTokenProviders().AddRoles<IdentityRole>().AddRoleManager<RoleManager<IdentityRole>>();
 builder.Services.AddEndpointsApiExplorer();
 
-builder.Services.ConfigureSwaggerGen(options =>
-{
-    options.CustomSchemaIds(x => x.FullName);
-});
+builder.Services.AddAuthorization();
+builder.Services.AddCustomAuthentication(conf);
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddSwaggerJwt();
 
-builder.Services.AddSwaggerGen(c =>
-{
-    c.CustomSchemaIds(i => i.FullName);
-});
+
+
 
 var app = builder.Build();
+
+//ServicesConfigurations.CreateRoles(app.Services, conf).Wait();
 
 //Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -41,6 +49,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 

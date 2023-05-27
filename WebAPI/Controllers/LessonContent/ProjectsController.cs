@@ -1,4 +1,5 @@
 ﻿using Business.Abstract.LessonContent;
+using Entities;
 using Entities.LessonContent;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

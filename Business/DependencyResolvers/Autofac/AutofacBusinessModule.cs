@@ -12,6 +12,7 @@ using Business.Abstract;
 using Business.Abstract.LessonContent;
 using Business.Concrete;
 using Business.Concrete.LeessonContent;
+using Business.TokenCreator;
 using Castle.DynamicProxy;
 using Core.Utilities.Helpers.FileHelper;
 using Core.Utilities.Interceptors;
@@ -21,6 +22,9 @@ using DataAccess.Concrete;
 using DataAccess.Concrete.LessonContent;
 using DataAccess.Concrete.LesssonContent;
 using Entities;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
 namespace Business.DependencyResolvers.Autofac
 {
@@ -30,6 +34,20 @@ namespace Business.DependencyResolvers.Autofac
         {
             builder.RegisterType<LessonManager>().As<ILessonService>().SingleInstance();
             builder.RegisterType<EfLessonDal>().As<ILessonDal>().SingleInstance();
+
+            builder.RegisterType<UserStore<CustomUser>>().As<IUserStore<CustomUser>>();
+            builder.RegisterType<ProjectDbContext>().As<IdentityDbContext<CustomUser>>().SingleInstance();
+            builder.RegisterType<RoleStore<IdentityRole>>().As<IRoleStore<IdentityRole>>();
+            builder.RegisterType<ProjectDbContext>().As<DbContext>().SingleInstance();
+            builder.RegisterType<UserManager<CustomUser>>();
+            builder.RegisterType<RoleManager<IdentityRole>>();
+            builder.RegisterType<SignInManager<CustomUser>>();
+
+
+            builder.RegisterType<AuthManager>().As<IAuthService>().SingleInstance();
+
+
+            builder.RegisterType<AccessTokenGenerator>().As<IAccessTokenCreator>().SingleInstance();
 
             builder.RegisterType<LecturerManager>().As<ILecturerService>().SingleInstance();
             builder.RegisterType<EfLecturerDal>().As<ILecturerDal>().SingleInstance();

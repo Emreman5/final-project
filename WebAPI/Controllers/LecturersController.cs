@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers
 {
+
     [Route("api/[controller]")]
     [ApiController]
     public class LecturersController : ControllerBase
@@ -38,7 +39,7 @@ namespace WebAPI.Controllers
             return BadRequest(result);
         }
 
-        [HttpGet("getbyıd")]
+        [HttpGet("getbyid")]
         public IActionResult GetById(int id)
         {
             var result = _lecturerService.GetById(id);

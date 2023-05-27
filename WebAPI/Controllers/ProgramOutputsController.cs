@@ -17,9 +17,9 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost("add")]
-        public IActionResult Add([FromForm] IFormFile file, [FromForm] ProgramOutput programOutput)
+        public IActionResult Add([FromForm] List<IFormFile> file, [FromForm] ProgramOutput programOutput)
         {
-            var result = _programOutputService.Add(file, programOutput);
+            var result = _programOutputService.Add(file[0], programOutput);
             if (result.IsSuccess)
             {
                 return Ok(result);
@@ -51,9 +51,9 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost("update")]
-        public IActionResult Update([FromForm] IFormFile file, [FromForm] ProgramOutput programOutput)
+        public IActionResult Update([FromForm] List<IFormFile> file, [FromForm] ProgramOutput programOutput)
         {
-            var result = _programOutputService.Update(file, programOutput);
+            var result = _programOutputService.Update(file[0], programOutput);
             if (result.IsSuccess)
             {
                 return Ok(result);

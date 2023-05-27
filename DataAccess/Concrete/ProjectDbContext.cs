@@ -6,16 +6,17 @@ using System.Threading.Tasks;
 using Entities;
 using Entities.LessonContent;
 using Microsoft.EntityFrameworkCore;
-
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 namespace DataAccess.Concrete
 {
-    public class ProjectDbContext:DbContext
+    public class ProjectDbContext : IdentityDbContext<CustomUser>
     {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"server = (localDb)\MsSqlLocalDb; Database = UniProject; Trusted_Connection = true");
+            optionsBuilder.UseSqlServer("Server=localhost\\SQLEXPRESS;Database=uni_db;Trusted_Connection=True; TrustServerCertificate=True;");
         }
 
+        public DbSet<ApplicationUserToken> AspNetUserTokens { get; set; }
         public DbSet<Lesson> Lessons { get; set; }
         public DbSet<Lecturer> Lecturers { get; set; }
         public DbSet<Period> Periods { get; set; }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Core.Utilities.Abstract;
+using Core.Utilities.Concrete;
 
 namespace Core.Utilities.Business
 {
@@ -19,7 +20,7 @@ namespace Core.Utilities.Business
                 }
             }
 
-            return null;
+            return new SuccesResult();
         }
     }
 }
