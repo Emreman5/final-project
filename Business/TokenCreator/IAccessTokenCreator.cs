@@ -13,5 +13,6 @@ namespace Business.TokenCreator
         public ApplicationUserToken GetToken(IConfiguration config, CustomUser user);
         public Task<bool> DeleteToken(CustomUser user);
         public Task<ApplicationUserToken> GetTokenByTokenValue(string token);
+        public Task<DateTime> GetTokenExpireDate(string refreshToken, CustomUser user);
     }
 }

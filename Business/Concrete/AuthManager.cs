@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Business.Abstract;
+using Business.Constants;
 using Business.TokenCreator;
 using Core.Utilities.Abstract;
 using Core.Utilities.Business;
@@ -11,6 +12,7 @@ using Core.Utilities.Concrete;
 using Entities;
 using Entities.DTOs;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
 namespace Business.Concrete
@@ -58,7 +60,6 @@ namespace Business.Concrete
         public async Task<IDataResult<AuthResponseDto>> Login(LoginDto loginDto, IConfiguration config)
         {
             var user = await _userManager.FindByNameAsync(loginDto.Username);
-            Console.WriteLine(user.Fullname);
             var logic = BusinessRules.Run(await SignIn(user, loginDto.Password));
             if (logic.IsSuccess == false)
                 return new ErrorDataResult<AuthResponseDto>(logic.Message);
@@ -82,14 +83,64 @@ namespace Business.Concrete
             return new SuccessDataResult<AuthResponseDto>(result);
         }
 
-        public Task<IDataResult<Token>> RefreshToken(string token, IConfiguration config)
+        public async Task<IDataResult<Token>> RefreshToken(string token, IConfiguration config)
         {
-            throw new NotImplementedException();
+           
+             var user = await _userManager.Users.FirstOrDefaultAsync(x => x.RefreshToken == token);
+            var accessTokenGenerator = _tokenCreator;
+            var expireDate = await accessTokenGenerator.GetTokenExpireDate(token, user);
+            if (expireDate < DateTime.Now && user.RefreshTokenExpireDate!.Value > DateTime.Now)
+            {
+
+                var userToken = accessTokenGenerator.GetToken(config, user);
+                var result = new Token()
+                {
+                    TokenBody = userToken.Value,
+                    ExpireDate = userToken.ExpireDate,
+                    RefreshToken = user.RefreshToken,
+                    RefreshTokenExpireDate = user.RefreshTokenExpireDate
+                };
+                return new SuccessDataResult<Token>(result);
+            }
+            if (user.RefreshTokenExpireDate.Value < DateTime.Now)
+            {
+                return new ErrorDataResult<Token>(AuthMessages.TryAgain);
+            }
+
+            return new ErrorDataResult<Token>(AuthMessages.TokenStillUsable);
         }
 
-        public Task<IDataResult<AuthResponseDto>> AuthMe(string token, string refreshToken, IConfiguration config)
+        public async Task<IDataResult<AuthResponseDto>> AuthMe(string token, string refreshToken, IConfiguration config)
         {
-            throw new NotImplementedException();
+            var refreshResult = await RefreshToken(refreshToken, config);
+            CustomUser user;
+            IList<string> roles;
+            if (!refreshResult.IsSuccess && refreshResult.Message == AuthMessages.TryAgain)
+            {
+                return new ErrorDataResult<AuthResponseDto>(AuthMessages.TryAgain);
+            }
+            var response = new AuthResponseDto();
+            if (!refreshResult.IsSuccess)
+            {
+                user = await _userManager.Users.FirstAsync(u => u.RefreshToken == refreshToken);
+                roles = await _userManager.GetRolesAsync(user);
+
+                var tokenObj = await _tokenCreator.GetTokenByTokenValue(token);
+                var oldToken = new Token()
+                {
+                    ExpireDate = tokenObj.ExpireDate,
+                    RefreshToken = user.RefreshToken,
+                    RefreshTokenExpireDate = user.RefreshTokenExpireDate,
+                    TokenBody = token
+                };
+
+                response.SetUser(user, roles.ToList(), oldToken, "A");
+                return new SuccessDataResult<AuthResponseDto>(response);
+            }
+            user = await _userManager.Users.FirstAsync(u => u.RefreshToken == refreshResult.Data.RefreshToken);
+            roles = await _userManager.GetRolesAsync(user);
+            response.SetUser(user, roles.ToList(), refreshResult.Data, "X");
+            return new SuccessDataResult<AuthResponseDto>(response);
         }
 
         public Task<IDataResult<AuthResponseDto>> RegisterAdminUser(RegisterDto registerDto, IConfiguration config)

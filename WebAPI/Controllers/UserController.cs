@@ -30,7 +30,7 @@ namespace WebAPI.Controllers
             
             if (dto.Username != selectedUser.UserName && await _userManager.FindByNameAsync(dto.Username) != null)
             {
-                return Forbid("bu kullanıcı ismine sahip bir kullanıcı var");
+                return BadRequest("Böyle bir kullanıcı var");
             }
             selectedUser.UserName = dto.Username;
             selectedUser.Email = dto.Email;

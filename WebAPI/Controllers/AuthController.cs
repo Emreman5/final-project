@@ -48,5 +48,15 @@ namespace WebAPI.Controllers
             }
             return Ok(result);
         }
+        [HttpGet("AuthMe")]
+        public async Task<IActionResult> Authme([FromHeader] string token, [FromHeader] string refreshToken)
+        {
+            var result = await _authService.AuthMe(token, refreshToken, _config);
+            if (!result.IsSuccess)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
+        }
     }
 }
