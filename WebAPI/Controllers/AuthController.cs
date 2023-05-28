@@ -58,5 +58,15 @@ namespace WebAPI.Controllers
             }
             return Ok(result);
         }
+        [HttpGet("Logout")]
+        public async Task<IActionResult> Logout([FromHeader] string token, [FromHeader] string refreshToken)
+        {
+            var result = await _authService.Logout(token, refreshToken);
+            if (!result.IsSuccess)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
+        }
     }
 }

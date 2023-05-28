@@ -17,6 +17,7 @@ var conf = builder.Configuration;
 // Add services to the container.
 
 builder.Services.AddControllers();
+builder.Services.AddCors();
 
 builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory()).ConfigureContainer<ContainerBuilder>(builder =>
     {
@@ -53,6 +54,10 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 
 app.UseAuthorization();
+app.UseCors(builder => builder
+    .AllowAnyOrigin()
+    .AllowAnyMethod()
+    .AllowAnyHeader());
 
 app.MapControllers();
 

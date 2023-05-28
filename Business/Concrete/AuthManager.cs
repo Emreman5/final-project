@@ -61,6 +61,7 @@ namespace Business.Concrete
         {
             var user = await _userManager.FindByNameAsync(loginDto.Username);
             var logic = BusinessRules.Run(await SignIn(user, loginDto.Password));
+           
             if (logic.IsSuccess == false)
                 return new ErrorDataResult<AuthResponseDto>(logic.Message);
             ApplicationUserToken userTokens = _tokenCreator.GetToken(config, user);
@@ -72,6 +73,7 @@ namespace Business.Concrete
                 RefreshToken = user.RefreshToken,
                 RefreshTokenExpireDate = user.RefreshTokenExpireDate
             };
+        
             var result = new AuthResponseDto()
             {
                 Email = user.Email,
@@ -163,6 +165,13 @@ namespace Business.Concrete
                 return new ErrorResult();
             }
 
+            return new SuccesResult();
+        }
+
+        public async Task<IResult> Logout(string token, string refreshToken)
+        {
+            _signInManager.SignOutAsync();
+            await _tokenCreator.DeleteToken(token, refreshToken);
             return new SuccesResult();
         }
     }

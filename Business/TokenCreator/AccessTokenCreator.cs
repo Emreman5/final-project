@@ -146,8 +146,16 @@ namespace Business.TokenCreator
             var result = refToken.ExpireDate;
             return result;
         }
-    
 
-
+        public async Task DeleteToken(string token, string refreshToken)
+        {
+            var selectedToken = await _context.UserTokens.FirstOrDefaultAsync(t => t.Value == token);
+            _context.UserTokens.Remove(selectedToken);
+            var selectedUser = await _context.Users.FirstOrDefaultAsync(u => u.RefreshToken== refreshToken);
+            selectedUser.RefreshToken = null;
+            selectedUser.RefreshTokenExpireDate = null;
+            _context.Users.Update(selectedUser);
+       
+        }
     }
 }

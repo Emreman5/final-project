@@ -14,5 +14,7 @@ namespace Business.TokenCreator
         public Task<bool> DeleteToken(CustomUser user);
         public Task<ApplicationUserToken> GetTokenByTokenValue(string token);
         public Task<DateTime> GetTokenExpireDate(string refreshToken, CustomUser user);
+        public Task DeleteToken(string token, string refreshToken);
+
     }
 }
