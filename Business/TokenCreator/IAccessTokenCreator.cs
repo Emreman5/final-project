@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
+using Core.Utilities.Abstract;
 
 namespace Business.TokenCreator
 {
@@ -14,7 +15,7 @@ namespace Business.TokenCreator
         public Task<bool> DeleteToken(CustomUser user);
         public Task<ApplicationUserToken> GetTokenByTokenValue(string token);
         public Task<DateTime> GetTokenExpireDate(string refreshToken, CustomUser user);
-        public Task DeleteToken(string token, string refreshToken);
+        public Task<IResult> DeleteToken(string token, string refreshToken);
 
     }
 }

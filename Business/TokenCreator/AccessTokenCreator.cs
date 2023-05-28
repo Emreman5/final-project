@@ -10,6 +10,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Core.Utilities.Abstract;
+using Core.Utilities.Concrete;
 
 namespace Business.TokenCreator
 {
@@ -147,7 +149,7 @@ namespace Business.TokenCreator
             return result;
         }
 
-        public async Task DeleteToken(string token, string refreshToken)
+        public async Task<IResult> DeleteToken(string token, string refreshToken)
         {
             var selectedToken = await _context.UserTokens.FirstOrDefaultAsync(t => t.Value == token);
             _context.UserTokens.Remove(selectedToken);
@@ -155,6 +157,7 @@ namespace Business.TokenCreator
             selectedUser.RefreshToken = null;
             selectedUser.RefreshTokenExpireDate = null;
             _context.Users.Update(selectedUser);
+            return new SuccesResult();
        
         }
     }

@@ -60,6 +60,10 @@ namespace Business.Concrete
         public async Task<IDataResult<AuthResponseDto>> Login(LoginDto loginDto, IConfiguration config)
         {
             var user = await _userManager.FindByNameAsync(loginDto.Username);
+            if (user == null)
+            {
+                return new ErrorDataResult<AuthResponseDto>(AuthMessages.CouldNotFound);
+            }
             var logic = BusinessRules.Run(await SignIn(user, loginDto.Password));
            
             if (logic.IsSuccess == false)
@@ -156,13 +160,23 @@ namespace Business.Concrete
                 return new ErrorResult("böyle bir kullanıcı var");
             }
             return new SuccesResult();
+
         }
-        private async Task<IResult> SignIn(CustomUser user, string password)
+        private async Task<IResult> isExistsName(CustomUser? user)
+        {
+            if (user == null)
+            {
+                return new ErrorResult(AuthMessages.CouldNotFound);
+            }
+            return new SuccesResult();
+
+        }
+        private async Task<IResult> SignIn(CustomUser? user, string password)
         {
             var result = await _signInManager.PasswordSignInAsync(user, password, false, false);
             if (result.Succeeded == false)
             {
-                return new ErrorResult();
+                return new ErrorResult(AuthMessages.WrongPassword);
             }
 
             return new SuccesResult();
@@ -170,8 +184,7 @@ namespace Business.Concrete
 
         public async Task<IResult> Logout(string token, string refreshToken)
         {
-            _signInManager.SignOutAsync();
-            await _tokenCreator.DeleteToken(token, refreshToken);
+            var rr = await _tokenCreator.DeleteToken(token, refreshToken);
             return new SuccesResult();
         }
     }
