@@ -44,7 +44,7 @@ namespace WebAPI.Controllers
             var result = await _authService.Login(dto, _config);
             if (!result.IsSuccess)
             {
-                return BadRequest(result);
+                return BadRequest(result.Message);
             }
             return Ok(result);
         }
