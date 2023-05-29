@@ -38,6 +38,28 @@ namespace WebAPI.Controllers
 
             return BadRequest(result);
         }
+        [HttpGet("getallwithdetails")]
+        public IActionResult GetAllWithDetails()
+        {
+            var result = _lessonService.GetAllLessonsWithDetail();
+            if (result.IsSuccess)
+            {
+                return Ok(result);
+            }
+
+            return BadRequest(result);
+        }
+        [HttpGet("getallwithdetailsbyid")]
+        public IActionResult GetAllWithDetailsById([FromQuery] string id)
+        {
+            var result = _lessonService.GetAllLessonsWithDetailById(id);
+            if (result.IsSuccess)
+            {
+                return Ok(result);
+            }
+
+            return BadRequest(result);
+        }
 
         [HttpGet("getbyid")]
         public IActionResult GetById(int id)

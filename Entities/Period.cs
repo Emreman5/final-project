@@ -11,8 +11,7 @@ namespace Entities
     {
         public int  Id { get; set; }
         public string PeriodName { get; set; }
-        public DateTime StartDate { get; set; }
-        public DateTime FinishDate { get; set; }
+      
 
     }
 }

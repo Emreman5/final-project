@@ -62,9 +62,5 @@ namespace Business.Concrete
             return new ErrorResult(Messages.InvalidLecturer);
         }
 
-        public IDataResult<List<LecturerDetailsDto>> GetLecturerDetails()
-        {
-            return new SuccessDataResult<List<LecturerDetailsDto>>(_lecturerDal.LecturerDetails());
-        }
     }
 }

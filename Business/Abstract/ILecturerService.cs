@@ -16,6 +16,5 @@ namespace Business.Abstract
         IDataResult<Lecturer> GetById(int id);
         IResult Update(Lecturer lecturer);
         IResult Delete(Lecturer lecturer);
-        IDataResult<List<LecturerDetailsDto>> GetLecturerDetails();
     }
 }

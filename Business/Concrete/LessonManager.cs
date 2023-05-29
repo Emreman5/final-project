@@ -13,6 +13,7 @@ using Core.Utilities.Business;
 using Core.Utilities.Concrete;
 using DataAccess.Abstract;
 using Entities;
+using Entities.DTOs;
 
 namespace Business.Concrete
 {
@@ -29,7 +30,7 @@ namespace Business.Concrete
         public IResult Add(Lesson lesson)
         {
             var result = BusinessRules.Run(CheckLessonLimitByLecturerId(lesson.LecturerId));
-            if (result != null)
+            if (!result.IsSuccess)
             {
                 return result;
             }
@@ -79,6 +80,18 @@ namespace Business.Concrete
             }
 
             return new SuccesResult();
+        }
+
+        public IDataResult<List<LessonDetailDto>> GetAllLessonsWithDetail()
+        {
+            var result = _lessonDal.GetLessonsWithDetail();
+            return new SuccessDataResult<List<LessonDetailDto>>(result);
+        }
+
+        public IDataResult<List<LessonDetailDto>> GetAllLessonsWithDetailById(string id)
+        {
+            var result = _lessonDal.GetLessonsWithDetailById(id);
+            return new SuccessDataResult<List<LessonDetailDto>>(result);
         }
     }
 }

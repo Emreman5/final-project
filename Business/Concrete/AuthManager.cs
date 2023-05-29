@@ -22,17 +22,19 @@ namespace Business.Concrete
         private readonly UserManager<CustomUser> _userManager;
         private readonly SignInManager<CustomUser> _signInManager;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly ILecturerService _lecturerService;
         private readonly IAccessTokenCreator _tokenCreator;
 
         public AuthManager(UserManager<CustomUser> userManager,
             SignInManager<CustomUser> signInManager,
-            RoleManager<IdentityRole> roleManager, IAccessTokenCreator accessTokenGenerator)
+            RoleManager<IdentityRole> roleManager, IAccessTokenCreator accessTokenGenerator, ILecturerService lecturerService)
 
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
             _tokenCreator = accessTokenGenerator;
+            _lecturerService = lecturerService;
         }
         public async Task<IDataResult<AuthResponseDto>> CreateUser(RegisterDto registerDto, IConfiguration config)
         {
@@ -45,10 +47,19 @@ namespace Business.Concrete
                 UserName = registerDto.Username,
                 Email = registerDto.Email,
             };
+            if (registerDto.Role == "User")
+            {
+                var lecturer = new Lecturer()
+                {
+                    FullName = registerDto.FullName,
+                    CommunicationInformation = registerDto.Email,
+                    UserId = user.Id
+                };
+                _lecturerService.Add(lecturer);
+            }
             var rr = await _userManager.CreateAsync(user, registerDto.Password);
             if (!rr.Succeeded)
             {
-                Console.WriteLine(rr.ToString());
                 return new ErrorDataResult<AuthResponseDto>(String.Join("\n", rr.ToString()));
             }
             await _userManager.AddToRoleAsync(user, registerDto.Role);

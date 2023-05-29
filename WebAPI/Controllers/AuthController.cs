@@ -20,7 +20,7 @@ namespace WebAPI.Controllers
 
         [HttpPost("CreateUser")]
         public async Task<IActionResult> Register([FromBody] RegisterDto dto)
-        {
+        {     
             try
             {
                 var result = await _authService.CreateUser(dto, _config);
