@@ -68,7 +68,6 @@ namespace Business.TokenCreator
             user.RefreshToken = tokenInfo.RefreshToken;
             user.RefreshTokenExpireDate = tokenInfo.ExpireDate.AddSeconds(30);
             _context.Users.Update(user);
-            _context.SaveChanges();
             return tokenInfo;
         }
 
@@ -107,7 +106,6 @@ namespace Business.TokenCreator
                 _context.UserTokens.Add(userTokens);
             }
 
-            _context.SaveChangesAsync();
 
             return userTokens;
         }
@@ -126,7 +124,6 @@ namespace Business.TokenCreator
                     _context.UserTokens.Remove(userTokens);
                 }
 
-                await _context.SaveChangesAsync();
             }
             catch (Exception)
             {
