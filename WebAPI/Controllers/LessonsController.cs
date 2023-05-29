@@ -85,9 +85,9 @@ namespace WebAPI.Controllers
         }
 
         [HttpDelete("delete")]
-        public IActionResult Delete(Lesson lesson)
+        public IActionResult Delete(int lessonId)
         {
-            var result = _lessonService.Delete(lesson);
+            var result = _lessonService.Delete(lessonId);
             if (result.IsSuccess)
             {
                 return Ok(result);

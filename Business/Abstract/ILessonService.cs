@@ -14,6 +14,6 @@ namespace Business.Abstract
         IDataResult<List<LessonDetailDto>> GetAllLessonsWithDetail();
         IDataResult<List<LessonDetailDto>> GetAllLessonsWithDetailById(string id);
 
-        IResult Delete(Lesson lesson);
+        IResult Delete(int lessonId);
     }
 }
