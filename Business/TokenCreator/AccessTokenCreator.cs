@@ -106,7 +106,7 @@ namespace Business.TokenCreator
                 _context.UserTokens.Add(userTokens);
             }
 
-
+            _context.SaveChanges();
             return userTokens;
         }
 
@@ -141,7 +141,7 @@ namespace Business.TokenCreator
 
         public async Task<DateTime> GetTokenExpireDate(string refreshToken, CustomUser user)
         {
-            var refToken =  (ApplicationUserToken) await _context.UserTokens.FirstOrDefaultAsync(t => t.UserId == user.Id);
+            var refToken =  (ApplicationUserToken)_context.UserTokens.FirstOrDefault(t => t.UserId == user.Id);
             var result = refToken.ExpireDate;
             return result;
         }
