@@ -74,7 +74,7 @@ namespace Business.Concrete
         private IResult CheckLessonLimitByLecturerId(int? lecturerId)
         {
             var result = _lessonDal.GetAll(l => l.LecturerId == lecturerId);
-            if (result.Count >= 2)
+            if (result.Count >= 10)
             {
                 return new ErrorResult(Messages.LimitExceeded);
             }
