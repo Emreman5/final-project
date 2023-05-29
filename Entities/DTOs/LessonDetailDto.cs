@@ -8,6 +8,7 @@ namespace Entities.DTOs
 {
     public class LessonDetailDto
     {
+        public int LessonId { get; set; }
         public string LecturerName { get; set; }
         public string PeriodName { get; set; }
         public string LessonCode { get; set; }
