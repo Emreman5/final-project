@@ -60,12 +60,12 @@ namespace Business.Concrete
             return new ErrorResult(Messages.InvalidLesson);
         }
 
-        public IResult Delete(Lesson lesson)
+        public IResult Delete(int lessonId)
         {
-            var lesson1 = _lessonDal.Get(l => l.Id == lesson.Id);
+            var lesson1 = _lessonDal.Get(l => l.Id == lessonId);
             if (lesson1 != null)
             {
-                _lessonDal.Delete(lesson);
+                _lessonDal.Delete(lesson1);
                 return new SuccesResult(Messages.DeletedLesson);
             }
             return new ErrorResult(Messages.InvalidLesson);

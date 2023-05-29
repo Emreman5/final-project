@@ -24,6 +24,7 @@ namespace DataAccess.Concrete
                            lesson.PeriodId equals p.Id
                            select new LessonDetailDto
                            {
+                               LessonId= lesson.Id,
                                LecturerName = lect.FullName,
                                LessonCode = lesson.LessonCode,
                                LessonName = lesson.LessonName,
@@ -46,6 +47,7 @@ namespace DataAccess.Concrete
                            where lect.UserId == userId
                            select new LessonDetailDto
                            {
+                               LessonId = lesson.Id,
                                LecturerName = lect.FullName,
                                LessonCode = lesson.LessonCode,
                                LessonName = lesson.LessonName,
