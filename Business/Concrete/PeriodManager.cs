@@ -48,12 +48,12 @@ namespace Business.Concrete
             return new ErrorResult(Messages.InvalidPeriod);
         }
 
-        public IResult Delete(Period period)
+        public IResult Delete(int id)
         {
-            var result = GetById(period.Id);
+            var result = _periodDal.Get(p => p.Id == id);
             if (result != null)
             {
-                _periodDal.Delete(period);
+                _periodDal.Delete(result);
                 return new SuccesResult(Messages.DeletedPeriod);
             }
             return new ErrorResult(Messages.InvalidPeriod);

@@ -61,9 +61,9 @@ namespace WebAPI.Controllers
         }
 
         [HttpDelete("delete")]
-        public IActionResult Delete(Period period)
+        public IActionResult Delete([FromQuery] int id)
         {
-            var result = _periodService.Delete(period);
+            var result = _periodService.Delete(id);
             if (result.IsSuccess)
             {
                 return Ok(result);
