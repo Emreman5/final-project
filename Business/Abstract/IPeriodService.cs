@@ -14,6 +14,6 @@ namespace Business.Abstarct
         IDataResult<List<Period>> GetAll();
         IDataResult<Period> GetById(int id);
         IResult Update(Period period);
-        IResult Delete(Period period);
+        IResult Delete(int id);
     }
 }
